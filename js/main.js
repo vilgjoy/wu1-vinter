@@ -33,8 +33,7 @@ window.onscroll = () => {
 
 
 function step(timestamp) {
-    ctx.fillStyle = BACKGROUND_COLOR;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     if (!start) start = timestamp;
     let progress = timestamp - start;
 
