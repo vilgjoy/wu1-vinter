@@ -10,8 +10,18 @@ body {
     background-color: rgba(103, 157, 157, 0.587);
 }
 
+main {
+    text-align: center;
+}
+
 h1 {
     font-size: 8rem;
+    color: #fff;
+    font-family: sans-serif;
+}
+
+p {
+    font-size: 1.5rem;
     color: #fff;
     font-family: sans-serif;
 }
@@ -21,5 +31,5 @@ canvas {
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 100;
+    z-index: -1;
 }

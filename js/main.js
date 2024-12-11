@@ -1,83 +1,95 @@
-let canvas = document.createElement('canvas');
-canvas.setAttribute("id", "bg");
-//canvas.setAttribute = "id:"
-//let canvas = document.getElementById('bg');
-canvas.width  = window.innerWidth;
-canvas.height = window.innerHeight;
-
-const SNOW_COLOR = "rgba(235,235,235,0.8)";
-const BACKGROUND_COLOR = "#1c0030";
-
-let ctx = canvas.getContext('2d');
-
-let start = null;
-
-let particles = [];
-const PI_2 = 2 * Math.PI;
-
-function randomInt(min,max) {
-    return Math.floor(Math.random()*(max-min)) + min;
+const randomInt = (min, max) => {
+  return Math.floor(Math.random() * (max - min)) + min
 }
 
-let body = document.getElementsByTagName('body')[0];
+const canvas = document.createElement("canvas")
+canvas.setAttribute("id", "bg")
+canvas.width = window.innerWidth
+canvas.height = window.innerHeight
+const ctx = canvas.getContext("2d")
+const pi2 = 2 * Math.PI
+let particles = []
+const bodyElement = document.querySelector("body")
+bodyElement.appendChild(canvas)
 
-body.appendChild(canvas);
+/* Om du vill ändra snöfärgen */
+const snowColor = "rgba(235,235,235,0.8)"
 
 window.onresize = () => {
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight; 
+  canvas.width = window.innerWidth
+  canvas.height = window.innerHeight
 }
 window.onscroll = () => {
-    canvas.setAttribute("style", "top: " + window.pageYOffset + "px");
+  canvas.setAttribute("style", `top: ${window.scrollY}px`)
 }
 
+const step = () => {
+  ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-function step(timestamp) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    if (!start) start = timestamp;
-    let progress = timestamp - start;
+  particles.forEach((element) => {
+    element.draw()
+    element.update()
+    particles = particles.filter((particle) => !particle.toDelete)
+  })
 
-    particles.forEach(element => {
-        element.draw();
-    });
+  if (particles.length < 500) {
+    spawnParticles(3)
+  }
 
-    spawnParticles(5);
-
-    window.requestAnimationFrame(step);
+  window.requestAnimationFrame(step)
 }
 
-window.requestAnimationFrame(step);
+window.requestAnimationFrame(step)
 
-const Particle = function(x, y, color)
-{
-    let particle = {};
-    particle.x = x;
-    particle.y = y;
-    particle.dy = 1 + (Math.random()*3);
-    particle.dx = -1 + (Math.random()*2);
-    particle.color = SNOW_COLOR;
-    particle.size = 2 + Math.floor(Math.random()*2);
-    particle.draw = function()
-    {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, PI_2, false);
-
-        ctx.fillStyle = this.color;
-        
-        ctx.fill();
-        particle.update();
+const Particle = (x, y, color) => {
+  let particle = {}
+  particle.x = x
+  particle.y = y
+  particle.dy = 1 + Math.random() * 3
+  particle.dx = -1 + Math.random() * 2
+  particle.color = color
+  particle.size = 2 + Math.floor(Math.random() * 2)
+  particle.toDelete = false
+  particle.draw = function () {
+    ctx.beginPath()
+    ctx.arc(particle.x, particle.y, particle.size, 0, pi2, false)
+    ctx.fillStyle = particle.color
+    ctx.fill()
+  }
+  particle.update = function () {
+    particle.y += particle.dy
+    particle.x += particle.dx
+    if (
+      particle.y > canvas.height ||
+      particle.x < 0 ||
+      particle.x > canvas.width
+    ) {
+      particle.toDelete = true
     }
-    particle.update = function()
-    {
-      this.y += this.dy;
-      this.x += this.dx;
-    }
+  }
 
-    return particle;
+  return particle
 }
 
-function spawnParticles(amount) {
-    for(let i = 0; i < amount; i++) {
-        particles.push(Particle(randomInt(0, canvas.width), 0, 'rgba(235, 235, 235, 0.8)'));
-    }
+const spawnParticles = (amount) => {
+  for (let i = 0; i < amount; i++) {
+    particles.push(Particle(randomInt(0, canvas.width), 0, snowColor))
+  }
+}
+
+const getQueryParams = () => {
+  const params = new URLSearchParams(window.location.search)
+  const name = params.get('name')
+  const message = params.get('message')
+  return { name, message }
+}
+
+const { name, message } = getQueryParams()
+console.log(`Name: ${name}, Message: ${message}`)
+
+if (name && message) {
+  const nameElement = document.querySelector("#name")
+  nameElement.textContent = name
+  const messageElement = document.querySelector("#message")
+  messageElement.textContent = message
 }
