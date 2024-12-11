@@ -13,7 +13,7 @@ const bodyElement = document.querySelector("body")
 bodyElement.appendChild(canvas)
 
 /* Om du vill ändra snöfärgen */
-const snowColor = "rgba(235,235,235,0.8)"
+const color = [255, 255, 255]
 
 window.onresize = () => {
   canvas.width = window.innerWidth
@@ -47,7 +47,7 @@ const Particle = (x, y, color) => {
   particle.y = y
   particle.dy = 1 + Math.random() * 3
   particle.dx = -1 + Math.random() * 2
-  particle.color = color
+  particle.color = `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${Math.random()})`
   particle.size = 2 + Math.floor(Math.random() * 2)
   particle.toDelete = false
   particle.draw = function () {
@@ -73,7 +73,7 @@ const Particle = (x, y, color) => {
 
 const spawnParticles = (amount) => {
   for (let i = 0; i < amount; i++) {
-    particles.push(Particle(randomInt(0, canvas.width), 0, snowColor))
+    particles.push(Particle(randomInt(0, canvas.width), 0, color))
   }
 }
 
