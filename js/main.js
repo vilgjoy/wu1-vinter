@@ -14,6 +14,7 @@ bodyElement.appendChild(canvas)
 
 /* Om du vill ändra snöfärgen */
 const color = [255, 255, 255]
+const speed = 5
 
 window.onresize = () => {
   canvas.width = window.innerWidth
@@ -32,7 +33,7 @@ const step = () => {
     particles = particles.filter((particle) => !particle.toDelete)
   })
 
-  if (particles.length < 500) {
+  if (particles.length < 400) {
     spawnParticles(3)
   }
 
@@ -45,18 +46,18 @@ const Particle = (x, y, color) => {
   let particle = {}
   particle.x = x
   particle.y = y
-  particle.dy = 1 + Math.random() * 3
-  particle.dx = -1 + Math.random() * 2
+  particle.dy = (1 + Math.random() * 3) * speed / 5
+  particle.dx = (-1 + Math.random() * 2) * speed / 5
   particle.color = `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${Math.random()})`
   particle.size = 2 + Math.floor(Math.random() * 2)
   particle.toDelete = false
-  particle.draw = function () {
+  particle.draw = () => {
     ctx.beginPath()
     ctx.arc(particle.x, particle.y, particle.size, 0, pi2, false)
     ctx.fillStyle = particle.color
     ctx.fill()
   }
-  particle.update = function () {
+  particle.update = () => {
     particle.y += particle.dy
     particle.x += particle.dx
     if (
@@ -79,17 +80,17 @@ const spawnParticles = (amount) => {
 
 const getQueryParams = () => {
   const params = new URLSearchParams(window.location.search)
-  const name = params.get('name')
+  const title = params.get('title')
   const message = params.get('message')
-  return { name, message }
+  return { title, message }
 }
 
-const { name, message } = getQueryParams()
-console.log(`Name: ${name}, Message: ${message}`)
+const { title, message } = getQueryParams()
+console.log(`Title: ${title}, Message: ${message}`)
 
-if (name && message) {
-  const nameElement = document.querySelector("#name")
-  nameElement.textContent = name
+if (title || message) {
+  const titleElement = document.querySelector("#title")
+  titleElement.textContent = title
   const messageElement = document.querySelector("#message")
   messageElement.textContent = message
 }
