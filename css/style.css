@@ -1,8 +1,16 @@
+@font-face {
+  font-family: 'KerakNeraka';
+  src: url('./KerakNeraka-8Oaoz.otf');
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
   --color-bg: rgba(103, 157, 157, 0.587);
   --color-fg: #fff;
 
-  --font: sans-serif;
+  --font-body: sans-serif;
+  --font-header: 'KerakNeraka', sans-serif;
 
   --step--2: clamp(0.6331rem, 0.6141rem + 0.0949vw, 0.6877rem);
   --step--1: clamp(0.844rem, 0.7993rem + 0.2234vw, 0.9724rem);
@@ -29,7 +37,7 @@ body {
 
 main {
     text-align: center;
-    padding: 2rem;
+    padding: var(--step-1);
     z-index: 1;
 }
 
@@ -37,13 +45,14 @@ h1 {
     font-size: var(--step-5);
     line-height: 1;
     color: var(--color-fg);
-    font-family: var(--font);
+    font-family: var(--font-header);
+    letter-spacing: .1em;
 }
 
 p {
     font-size: var(--step-2);
     color: var(--color-fg);
-    font-family: var(--font);
+    font-family: var(--font-body);
 }
 
 canvas {
