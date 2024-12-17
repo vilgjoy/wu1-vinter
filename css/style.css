@@ -61,3 +61,27 @@ canvas {
     left: 0;
     z-index: 0;
 }
+
+div {
+    display: flex;
+    align-items: center;
+}
+.image-container {
+    width: 20%;
+    cursor: pointer;
+}
+
+.image-container.left {
+    text-align: left;
+    margin-left: 10px;
+}
+
+.image-container.right {
+    text-align: right;
+    margin-right: 10px;
+}
+
+.image-container img {
+    max-width: 100%;
+    height: auto;
+}
